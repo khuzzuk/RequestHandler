@@ -1,30 +1,26 @@
 package com.epam.rh;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class SecondarySocket {
+class SecondarySocket {
     public static void main(String[] args) {
-        try (
-                Socket server = new Socket("localhost",60000);
-                PrintWriter writer = new PrintWriter(server.getOutputStream(), true);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
-                //BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in))
-                ){
-            String serverMessage, clientMessage;
-            while ((serverMessage=reader.readLine())!=null){
-                System.out.println("server: "+serverMessage);
-                clientMessage = "message";
-                if (clientMessage!=null){
-                    System.out.println("client: "+clientMessage);
-                    writer.println(clientMessage);
-                }
+        SecondarySocket secondarySocket = new SecondarySocket();
+        secondarySocket.loopConnections();
+    }
+
+    private void loopConnections() {
+        while (true) {
+            try (
+                    Socket server = new Socket("localhost", 60000);
+                    PrintWriter writer = new PrintWriter(server.getOutputStream(), true)
+            ) {
+                writer.println("message");
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
