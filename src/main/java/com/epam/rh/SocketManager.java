@@ -12,4 +12,7 @@ class SocketManager {
     void closeSocket(Socket socket){
         tp.submit(new SocketCloser(socket));
     }
+    void submitConnection() {
+        tp.submit(new SocketRequester());
+    }
 }

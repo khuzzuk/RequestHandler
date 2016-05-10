@@ -1,8 +1,6 @@
 package com.epam.rh;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.util.concurrent.Executors;
 
 class SecondarySocket {
     public static void main(String[] args) {
@@ -11,16 +9,9 @@ class SecondarySocket {
     }
 
     private void loopConnections() {
+        SocketManager manager = new SocketManager(Executors.newFixedThreadPool(1));
         while (true) {
-            try (
-                    Socket server = new Socket("localhost", 60000);
-                    PrintWriter writer = new PrintWriter(server.getOutputStream(), true)
-            ) {
-                writer.println("message");
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
-            }
+            manager.submitConnection();
         }
     }
 }
