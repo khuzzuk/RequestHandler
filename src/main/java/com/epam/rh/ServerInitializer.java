@@ -11,13 +11,15 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
-public class ServerInitializer {
-    int port;
+class ServerInitializer {
+    private final int port;
 
+    @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
     public ServerInitializer(int port) {
         this.port = port;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void initialize() {
         ChannelFactory channelFactory = new NioServerSocketChannelFactory(
                 Executors.newCachedThreadPool(), Executors.newCachedThreadPool()

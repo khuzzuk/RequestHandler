@@ -10,7 +10,8 @@ class SocketRequester implements Runnable {
         try (Socket socket = new Socket("localhost", 60000)){
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             writer.println("message");
-            socket.close();
+            writer.println("");
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

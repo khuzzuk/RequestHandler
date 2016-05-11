@@ -12,7 +12,11 @@ class SocketManager {
     void closeSocket(Socket socket){
         tp.submit(new SocketCloser(socket));
     }
-    void submitConnection() {
+    void submitSocketConnection() {
         tp.submit(new SocketRequester());
+    }
+    @SuppressWarnings("unused")
+    void submitHttpConnection(){
+        tp.submit(new UrlRequester());
     }
 }
