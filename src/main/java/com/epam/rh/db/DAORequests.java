@@ -1,8 +1,9 @@
 package com.epam.rh.db;
 
 import com.epam.rh.requests.Request;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class DAORequests {
     private DAOHandler handler;
@@ -12,10 +13,12 @@ public class DAORequests {
     }
 
     public void saveRequest(Request request){
-        Session session = handler.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        tx.begin();
-        session.save(request);
-        tx.commit();
+        try {
+            PreparedStatement statement = handler.getCurrentSession().prepareStatement("");
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
