@@ -1,13 +1,13 @@
 package com.epam.rh.db;
 
-import com.epam.rh.requests.Request;
-
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bus {
     private ExecutorService channel;
     DAORequests requests;
-    private long counter=0;
+    private AtomicInteger counter = new AtomicInteger(0);
+    private long startTime;
 
     public Bus(ExecutorService channel, DAORequests requests) {
         this.channel = channel;
@@ -26,9 +26,13 @@ public class Bus {
 
         @Override
         public void run() {
-            Request request = new Request();
-            request.setMessage(text);
-            requests.saveRequest(request);
+            requests.saveRequest(text);
+            int a = counter.addAndGet(1);
+            if (a>=10000){
+                counter = new AtomicInteger(0);
+                System.out.println("writing to DB rate: "+(a*1000/(System.currentTimeMillis()-startTime)));
+                startTime = System.currentTimeMillis();
+            }
         }
     }
 }

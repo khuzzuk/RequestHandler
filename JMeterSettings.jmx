@@ -34,7 +34,7 @@
           <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler" enabled="true">
             <stringProp name="TCPSampler.server">localhost</stringProp>
             <boolProp name="TCPSampler.reUseConnection">true</boolProp>
-            <stringProp name="TCPSampler.port">60000</stringProp>
+            <stringProp name="TCPSampler.port">60001</stringProp>
             <boolProp name="TCPSampler.nodelay">false</boolProp>
             <stringProp name="TCPSampler.timeout"></stringProp>
             <stringProp name="TCPSampler.request">message
