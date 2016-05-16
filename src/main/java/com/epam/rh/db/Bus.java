@@ -1,18 +1,21 @@
 package com.epam.rh.db;
 
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Component
+@NoArgsConstructor
 public class Bus {
+    @Autowired
     private ExecutorService channel;
+    @Autowired
     DAORequests requests;
     private AtomicInteger counter = new AtomicInteger(0);
     private long startTime;
-
-    public Bus(ExecutorService channel, DAORequests requests) {
-        this.channel = channel;
-        this.requests = requests;
-    }
 
     public void reportRequest(String requestText){
         channel.submit(new Task(requestText));

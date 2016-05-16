@@ -1,25 +1,25 @@
 package com.epam.rh;
 
 import com.epam.rh.db.Bus;
+import lombok.NoArgsConstructor;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
 
-
+@Service
+@NoArgsConstructor
 class CounterConnectionHandler extends SimpleChannelHandler {
     private static volatile int counter = 0;
     private static long startTime=0;
+    @Autowired
     private Bus bus;
-    private Charset charset;
-
-    public CounterConnectionHandler(Bus bus) {
-        this.bus = bus;
-        charset = Charset.forName("UTF-8");
-    }
+    private Charset charset = Charset.forName("UTF-8");
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {

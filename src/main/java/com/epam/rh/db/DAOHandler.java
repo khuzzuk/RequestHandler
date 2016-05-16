@@ -1,41 +1,46 @@
 package com.epam.rh.db;
 
-import org.hibernate.LazyInitializationException;
+import lombok.NoArgsConstructor;
 import org.postgresql.jdbc3.Jdbc3PoolingDataSource;
+import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
+@Repository
+@NoArgsConstructor
 public class DAOHandler {
 
-    private Connection connection;
-    private DataSource dataSource;
+    private static final int connectionsNumber = 30;
+    private Queue<Connection> connections;
     private Jdbc3PoolingDataSource source;
 
-    public DAOHandler() {
-    }
-
     Connection getCurrentSession() {
-        if (connection == null)
-            throw new LazyInitializationException("Connection should be first initialized with initializeConnection method.");
-        return connection;
+        return connections.poll();
+    }
+    void ReturnSession(Connection connection){
+        connections.offer(connection);
     }
 
-    public void initializeConnection() {
-        String dbAddress = "jdbc:postgresql://localhost:5432/requests";
+    @PostConstruct
+    private void initializeConnection() {
         Properties properties = loadProperties();
         source = new Jdbc3PoolingDataSource();
         source.setDataSourceName("PostgreSQL data source");
-        source.setServerName("localhost");
-        source.setDatabaseName("requests");
-        source.setUser("r_admin");
-        source.setPassword("1q2w");
-        source.setMaxConnections(30);
+        source.setServerName(properties.getProperty("hostName"));
+        source.setDatabaseName(properties.getProperty("dataBaseName"));
+        source.setUser(properties.getProperty("user"));
+        source.setPassword(properties.getProperty("password"));
+        source.setMaxConnections(connectionsNumber);
+        connections = new ArrayBlockingQueue<>(connectionsNumber);
         try {
-            connection = source.getConnection();
+            for (int i = 0; i < connectionsNumber; i++)
+                connections.offer(source.getConnection());
         } catch (SQLException e) {
             e.printStackTrace();
         }
