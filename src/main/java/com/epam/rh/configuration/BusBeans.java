@@ -12,7 +12,6 @@ import java.util.concurrent.Executors;
 public class BusBeans {
     @Bean
     public ExecutorService channel(){
-        System.out.println("Executor Bean");
         return Executors.newFixedThreadPool(5);
     }
 }
